@@ -1,6 +1,6 @@
 dummy_trend_data = {
     "keyword": "jdb엔터테인먼트 대표",
-    "approxTraffic": 1000,
+    "approxTraffic": 5000,
     "status": "timelapse1시간 동안 지속됨",
     "time": "2시간 전",
     "news": [
