@@ -1,0 +1,17 @@
+# LangChain & LangGraph
+langchain
+langgraph
+langchain-core
+langchain-community
+
+# LLM APIs
+langchain-groq
+langchain-google-genai
+
+# Tools
+langchain-experimental
+tavily-python
+trafilatura
+
+# Utilities
+python-dotenv

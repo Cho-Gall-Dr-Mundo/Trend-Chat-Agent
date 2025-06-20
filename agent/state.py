@@ -1,8 +1,10 @@
-from typing import TypedDict, Annotated, List
-import operator
+from typing import TypedDict, Dict, List, Optional
 from langchain_core.messages import BaseMessage
 
 class AgentState(TypedDict):
-    messages: Annotated[List[BaseMessage], operator.add]
-    next: str
+    messages: List[BaseMessage]
     trend_data: dict
+    scraped_contents: Dict[str, str]
+    summary: Optional[str]
+    categories: Optional[List[str]]
+    blog_post: Optional[str]

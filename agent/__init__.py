@@ -1,1 +1,1 @@
-from .supervisor import app
+from .graph import app
