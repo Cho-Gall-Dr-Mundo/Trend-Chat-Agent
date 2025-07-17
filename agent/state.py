@@ -7,4 +7,5 @@ class AgentState(TypedDict):
     scraped_contents: Dict[str, str]
     summary: Optional[str]
     categories: Optional[List[str]]
+    research_results: Optional[Dict]
     blog_post: Optional[str]

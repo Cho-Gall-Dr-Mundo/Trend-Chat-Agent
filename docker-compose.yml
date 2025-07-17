@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  ai-agent:
+    build: .
+    container_name: ai-agent
+    restart: unless-stopped
+    environment:
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      SERPER_API_KEY: ${SERPER_API_KEY}
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
+      KAFKA_BROKER_URL: "kafka:9092"
+      CONSUMER_TOPIC: ${CONSUMER_TOPIC}
+      PRODUCER_TOPIC: ${PRODUCER_TOPIC}
+      CONSUMER_GROUP_ID: ${CONSUMER_GROUP_ID}
+    networks:
+      - trend-chat
+
+networks:
+  trend-chat:
+    external:
+      name: trend-chat-docker-compose_trend-chat

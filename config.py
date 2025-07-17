@@ -6,6 +6,8 @@ LLM_GROQ_8B = ChatGroq(model_name="llama3-8b-8192", temperature=0)
 
 LLM_GROQ_70B = ChatGroq(model_name="llama3-70b-8192", temperature=0)
 
-LLM_GEMINI_FLASH = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.1)
+LLM_GEMINI_FLASH_1 = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0.1)
 
-# --- 도구 설정 ---
+LLM_GEMINI_FLASH_2 = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.1)
+
+LLM_GEMINI_PRO = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.1)
