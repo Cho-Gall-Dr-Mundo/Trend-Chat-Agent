@@ -6,26 +6,53 @@ def create_creator_agent(llm):
     return prompt | llm
 
 def creator_node(state, agent):
+    # 상태(state)에서 모든 재료를 가져옴
     summary = state.get('summary')
     categories = state.get('categories')
     trend_data = state.get('trend_data')
+    research_results = state.get('research_results', {}) # Researcher가 저장한 정보
 
-    if not (summary and categories and trend_data):
-        raise Exception("블로그 포스트 생성을 위한 데이터가 부족합니다.")
+    # 데이터 유효성 검사
+    if not all([summary, categories, trend_data]):
+        raise ValueError("Creator 노드 실행에 필요한 데이터가 부족합니다.")
 
-    # 만약 뉴스나 썸네일이 없을 경우를 대비하여 기본값을 설정
-    image_url = ""
-    if trend_data.get('news') and len(trend_data['news']) > 0:
-        image_url = trend_data['news'][0].get('thumbnail', "")
+    keyword = trend_data.get('keyword', '')
+    
+    # Researcher가 찾아준 정보를 바탕으로 뉴스 리스트와 이미지 URL 구성
+    news_list = research_results.get('news', [])
+    image_url = research_results.get('image_url', "")
 
-    # agent.invoke에 image_url을 추가로 전달
-    result = agent.invoke({
-        "keyword": trend_data['keyword'],
+    formatted_news_list = ""
+    if news_list and isinstance(news_list, list):
+        for item in news_list:
+            title = item.get("title", "제목 없음")
+            # 일반 검색 결과와 뉴스 검색 결과의 URL 키('link', 'url')를 모두 고려
+            url = item.get("link") or item.get("url", "#")
+            formatted_news_list += f"- {title} ({url})\n"
+            
+    # AI 에이전트에게 최종 정보 전달
+    final_payload = {
+        "keyword": keyword,
         "summary": summary,
         "categories": str(categories),
+        "news": formatted_news_list,
         "image_url": image_url
-    })
+    }
     
-    blog_post_content = result.content or ""
+    result = agent.invoke(final_payload)
     
+    # AI가 생성한 콘텐츠를 최종 가공
+    raw_content = getattr(result, "content", "") or ""
+    
+    # 만약 결과가 예상치 못하게 리스트로 왔을 경우를 대비하여 join 처리
+    if isinstance(raw_content, list):
+        # 이미지 태그가 깨지지 않도록 단순 join
+        blog_post_content = "".join(str(item) for item in raw_content)
+    else:
+        blog_post_content = str(raw_content)
+    
+    # 후처리: 불필요한 앞뒤 공백 및 줄바꿈 제거
+    blog_post_content = blog_post_content.strip()
+
+    # 최종 결과 반환
     return {"blog_post": blog_post_content}
